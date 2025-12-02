@@ -1,16 +1,12 @@
 const express = require('express');
 const morgan = require('morgan')
 const app = express();
+app.use(morgan('dev'))
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.set('view engine', 'ejs');
-app.use((req, res, next) => {
-    console.log("This is middleware");
-    const a=10
-    const b=20
-    const sum=a+b
-    console.log("Sum is: "+sum);
-    return next();
-})
-app.get('/', (req, res) => {
+app.use(express.static('public'));
+app.get('/',(req, res) => {
     res.render("index");
 })
 app.get("/about", (req, res) => {
@@ -18,5 +14,9 @@ app.get("/about", (req, res) => {
 })
 app.get("/profile", (req, res) => {
     res.send("This is profile page");
+})
+app.post("/get-form-data",(req,res)=>{
+    console.log(req.body);
+    res.send("Form data received");
 })
 app.listen(3000);
